@@ -1,33 +1,50 @@
 import React, { useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, TextInput, Pressable, Image } from 'react-native';
+import { styles } from './styles';
 
-let contadordePessoas = () => {
-  let [count, contador] = useState(0);
+const IMC = () => {
+  const [peso, setPeso] = useState('');
+  const [altura, setAltura] = useState('');
+  const [imc, setImc] = useState('');
+  const [situacao, setSituacao] = useState('');
 
-  let handleIncrement = () => {
-    contador(count + 1);
-  };
-
-  let handleDecrement = () => {
-    if (count > 0) {
-    contador(count - 1);
-    }
-  };
+  const calcularIMC = () => {
+    const imc = peso / (altura * altura);
+    setImc(imc.toFixed(2));
+    if (imc < 18.5) setSituacao('Abaixo do peso');
+    else if (imc < 25) setSituacao('Peso normal');
+    else if (imc < 30) setSituacao('Sobrepeso');
+    else if (imc < 35) setSituacao('Obesidade grau 1');
+    else if (imc < 40) setSituacao('Obesidade grau 2');
+    else setSituacao('Obesidade grau 3');
+  }
 
   return (
-    <View>
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Alcool ou Gasolina</Text>
+      <Image
+        source={{ uri: 'https://www.plasticadosonho.com.br/wp-content/uploads/2017/12/blog-06-como-calcular-o-imc.jpg' }}
+        style={{ width: 300, height: 200,marginBottom: 10}}
+      />
 
-      <Text style={{marginTop:60, textAlign: 'center', fontSize: 20, color: 'red'}}>Contador de pessoas:</Text>
-
-      <Text style={{marginTop:30, textAlign: 'center', fontSize: 50, color: 'red', marginBottom: 60}}>{count}</Text>
-      
-      <Button title="Mais" onPress={handleIncrement} />
-
-      <Text style={{marginTop:1}}></Text>
-
-      <Button title="Menos" onPress={handleDecrement} />
+      <TextInput
+        style={styles.input}
+        placeholder="Peso"
+        value={peso}
+        onChangeText={setPeso}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Altura"
+        value={altura}
+        onChangeText={setAltura}
+      />
+      <Pressable style={styles.botao} onPress={calcularIMC}>
+        <Text style={styles.botaoTexto}>Verificar</Text>
+      </Pressable>
+      <Text style={styles.resultado}>{situacao}</Text>
     </View>
   );
-};
+}
 
-export default contadordePessoas;
+export default IMC;
